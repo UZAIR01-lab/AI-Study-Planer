@@ -1,0 +1,597 @@
+
+<!-- saved from url=(0060)file:///C:/Users/aatif/Downloads/ai_smart_study_planner.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --ink:#0f0f0f;--ink2:#444;--ink3:#888;
+    --surface:#fff;--surface2:#f7f7f5;--surface3:#eeede8;
+    --accent:#4f46e5;--accent2:#818cf8;--accent3:#e0e7ff;
+    --green:#10b981;--green2:#d1fae5;
+    --amber:#f59e0b;--amber2:#fef3c7;
+    --red:#ef4444;--red2:#fee2e2;
+    --border:#e2e1d9;
+    --r:12px;
+  }
+  body{font-family:'DM Sans',sans-serif;background:var(--surface2);color:var(--ink);min-height:100vh}
+  h1,h2,h3{font-family:'Syne',sans-serif}
+
+  .app{display:flex;flex-direction:column;min-height:100vh;padding:0}
+
+  /* HEADER */
+  .header{background:var(--ink);color:#fff;padding:1.5rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+  .header-left{display:flex;align-items:center;gap:14px}
+  .logo-icon{width:44px;height:44px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+  .header h1{font-size:1.3rem;font-weight:800;letter-spacing:-0.02em;color:#fff}
+  .header p{font-size:12px;color:#a1a1aa;margin-top:2px}
+  .header-badge{background:#1a1a2e;border:1px solid #3730a3;color:var(--accent2);font-size:11px;font-weight:500;padding:4px 12px;border-radius:20px;white-space:nowrap}
+
+  /* TABS */
+  .tabs{background:var(--surface);border-bottom:1px solid var(--border);display:flex;gap:0;padding:0 2rem;overflow-x:auto}
+  .tab-btn{background:none;border:none;border-bottom:3px solid transparent;padding:14px 20px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;color:var(--ink3);cursor:pointer;white-space:nowrap;transition:all 0.2s;display:flex;align-items:center;gap:7px}
+  .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+  .tab-btn:hover:not(.active){color:var(--ink);background:var(--surface2)}
+  .tab-btn i{font-size:16px}
+
+  /* PANELS */
+  .panel{display:none;padding:2rem;animation:fadeIn 0.25s ease}
+  .panel.active{display:block}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+  /* SECTION TITLE */
+  .section-title{font-size:1.1rem;font-weight:700;color:var(--ink);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+  .section-title i{color:var(--accent);font-size:18px}
+
+  /* CARD */
+  .card{background:var(--surface);border-radius:var(--r);border:1px solid var(--border);padding:1.25rem 1.5rem;margin-bottom:1.25rem}
+  .card-sm{padding:1rem 1.25rem}
+
+  /* FORM ELEMENTS */
+  label{font-size:13px;font-weight:500;color:var(--ink2);display:block;margin-bottom:5px}
+  input[type=text],input[type=number],select{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;background:var(--surface2);color:var(--ink);outline:none;transition:border 0.2s}
+  input[type=text]:focus,input[type=number]:focus,select:focus{border-color:var(--accent);background:var(--surface)}
+  input[type=number]{width:90px}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+  .form-row-3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;margin-bottom:12px;align-items:end}
+  .form-full{margin-bottom:12px}
+
+  /* BUTTONS */
+  .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;border:none;transition:all 0.18s}
+  .btn-primary{background:var(--accent);color:#fff}
+  .btn-primary:hover{background:#4338ca;transform:translateY(-1px)}
+  .btn-danger{background:var(--red2);color:var(--red)}
+  .btn-danger:hover{background:#fecaca}
+  .btn-success{background:var(--green2);color:var(--green)}
+  .btn-outline{background:transparent;color:var(--ink);border:1px solid var(--border)}
+  .btn-outline:hover{background:var(--surface2)}
+  .btn-sm{padding:6px 12px;font-size:13px}
+  .btn-generate{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;width:100%;padding:13px;font-size:15px;border-radius:10px;border:none;font-family:'Syne',sans-serif;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all 0.2s;letter-spacing:0.01em}
+  .btn-generate:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(79,70,229,0.35)}
+  .btn-generate:active{transform:translateY(0)}
+
+  /* SUBJECT TABLE */
+  .subjects-list{display:flex;flex-direction:column;gap:8px}
+  .subject-row{display:grid;grid-template-columns:1fr auto auto auto;gap:10px;align-items:center;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px}
+  .subject-name{font-weight:500;font-size:14px;color:var(--ink)}
+  .subject-meta{font-size:12px;color:var(--ink3)}
+  .tag{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:0.02em}
+  .tag-high{background:var(--red2);color:var(--red)}
+  .tag-medium{background:var(--amber2);color:#92400e}
+  .tag-low{background:var(--green2);color:#065f46}
+  .priority-score{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--accent);min-width:48px;text-align:center}
+
+  /* TIMETABLE */
+  .timetable-grid{display:flex;flex-direction:column;gap:8px}
+  .time-slot{display:grid;grid-template-columns:100px 1fr;gap:12px;align-items:center}
+  .time-label{font-size:13px;font-weight:500;color:var(--ink3);text-align:right;padding-right:8px;border-right:2px solid var(--border)}
+  .time-block{border-radius:8px;padding:10px 14px;position:relative;overflow:hidden}
+  .time-block::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px}
+  .time-block.high{background:#fff0f0;border:1px solid #fecaca}
+  .time-block.high::before{background:var(--red)}
+  .time-block.medium{background:#fffbeb;border:1px solid #fde68a}
+  .time-block.medium::before{background:var(--amber)}
+  .time-block.low{background:#f0fdf4;border:1px solid #a7f3d0}
+  .time-block.low::before{background:var(--green)}
+  .time-block.break{background:var(--surface3);border:1px solid var(--border)}
+  .time-block.break::before{background:#ccc}
+  .block-subject{font-weight:600;font-size:14px;color:var(--ink)}
+  .block-detail{font-size:12px;color:var(--ink3);margin-top:2px}
+
+  /* STATS */
+  .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:1.25rem}
+  .stat-card{background:var(--surface);border-radius:var(--r);border:1px solid var(--border);padding:1rem 1.25rem;text-align:center}
+  .stat-value{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--accent)}
+  .stat-label{font-size:12px;color:var(--ink3);margin-top:3px}
+
+  /* PRIORITY CHART */
+  .chart-wrap{background:var(--surface);border-radius:var(--r);border:1px solid var(--border);padding:1.25rem;margin-bottom:1.25rem}
+  .chart-bars{display:flex;flex-direction:column;gap:10px}
+  .bar-row{display:grid;grid-template-columns:110px 1fr 60px;gap:10px;align-items:center}
+  .bar-name{font-size:13px;font-weight:500;color:var(--ink);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .bar-track{background:var(--surface3);border-radius:6px;height:22px;overflow:hidden;position:relative}
+  .bar-fill{height:100%;border-radius:6px;transition:width 0.6s cubic-bezier(.34,1.56,.64,1);display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:600;color:#fff}
+  .bar-score{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--ink);text-align:right}
+
+  /* EMPTY STATE */
+  .empty-state{text-align:center;padding:3rem 1rem;color:var(--ink3)}
+  .empty-state i{font-size:48px;opacity:0.25;margin-bottom:12px}
+  .empty-state p{font-size:14px}
+
+  /* TOAST */
+  .toast{position:fixed;bottom:24px;right:24px;background:var(--ink);color:#fff;padding:12px 20px;border-radius:10px;font-size:14px;font-weight:500;display:flex;align-items:center;gap:8px;z-index:99;animation:slideUp 0.3s ease;box-shadow:0 8px 24px rgba(0,0,0,0.2)}
+  @keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+  /* ABOUT */
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .info-card{background:var(--surface);border-radius:var(--r);border:1px solid var(--border);padding:1.25rem}
+  .info-card h3{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:10px;display:flex;align-items:center;gap:7px}
+  .info-card h3 i{color:var(--accent)}
+  .info-card ul{list-style:none;display:flex;flex-direction:column;gap:6px}
+  .info-card li{font-size:13px;color:var(--ink2);display:flex;align-items:flex-start;gap:7px}
+  .info-card li i{color:var(--green);font-size:15px;margin-top:1px;flex-shrink:0}
+  .formula-box{background:#0f0f2a;border-radius:10px;padding:1rem 1.25rem;font-family:monospace;color:#a5b4fc;font-size:13px;line-height:1.8;margin-top:8px}
+  .formula-highlight{color:#e879f9;font-weight:700}
+  .formula-result{color:#34d399}
+
+  /* CREDIT BAR */
+  .credit{text-align:center;padding:1.5rem;font-size:12px;color:var(--ink3);border-top:1px solid var(--border);background:var(--surface)}
+</style>
+
+</head><body><h2 class="sr-only">AI Smart Study Planner — enter your subjects and exam dates to generate an optimized study timetable</h2>
+
+<div class="app">
+  <div class="header">
+    <div class="header-left">
+      <div class="logo-icon">🧠</div>
+      <div>
+        <h1>AI Smart Study Planner</h1>
+        <p>Priority-based timetable generator</p>
+      </div>
+    </div>
+    <div class="header-badge"><i class="ti ti-sparkles" aria-hidden="true"></i> BTech CSE · AI Project</div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(&#39;planner&#39;)" id="tab-planner"><i class="ti ti-calendar-plus" aria-hidden="true"></i> Add Subjects</button>
+    <button class="tab-btn" onclick="switchTab(&#39;timetable&#39;)" id="tab-timetable"><i class="ti ti-table" aria-hidden="true"></i> Timetable</button>
+    <button class="tab-btn" onclick="switchTab(&#39;analytics&#39;)" id="tab-analytics"><i class="ti ti-chart-bar" aria-hidden="true"></i> Analytics</button>
+    <button class="tab-btn" onclick="switchTab(&#39;about&#39;)" id="tab-about"><i class="ti ti-info-circle" aria-hidden="true"></i> About Project</button>
+  </div>
+
+  <!-- PLANNER -->
+  <div class="panel active" id="panel-planner">
+    <div class="card">
+      <div class="section-title"><i class="ti ti-books" aria-hidden="true"></i> Add a Subject</div>
+      <div class="form-row-3">
+        <div>
+          <label>Subject name</label>
+          <input type="text" id="inp-name" placeholder="e.g. Calculus">
+        </div>
+        <div>
+          <label>Exam date</label>
+          <input type="date" id="inp-date" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-family:&#39;DM Sans&#39;,sans-serif;font-size:14px;background:var(--surface2);color:var(--ink);outline:none;">
+        </div>
+        <div>
+          <label>Difficulty</label>
+          <select id="inp-diff">
+            <option value="3">Hard</option>
+            <option value="2" selected="">Medium</option>
+            <option value="1">Easy</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div>
+          <label>Daily study hours available</label>
+          <input type="number" id="inp-hours" value="6" min="1" max="16" style="width:100%">
+        </div>
+        <div>
+          <label>Start study time (24h)</label>
+          <input type="number" id="inp-start" value="16" min="6" max="22" style="width:100%">
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="addSubject()"><i class="ti ti-plus" aria-hidden="true"></i> Add Subject</button>
+    </div>
+
+    <div class="section-title"><i class="ti ti-list" aria-hidden="true"></i> Subjects List</div>
+    <div id="subjects-container">
+      <div class="empty-state" id="empty-subjects" style="display: none;">
+        <i class="ti ti-books" aria-hidden="true"></i>
+        <p>No subjects added yet. Add your first subject above.</p>
+      </div>
+      <div class="subjects-list" id="subjects-list"><div class="subject-row">
+      <div>
+        <div class="subject-name">billglug</div>
+        <div class="subject-meta"><i class="ti ti-calendar" style="font-size:12px" aria-hidden="true"></i> 2 days left · Medium</div>
+      </div>
+      <span class="tag tag-high">High</span>
+      <div class="priority-score">1.00</div>
+      <button class="btn btn-danger btn-sm" onclick="removeSubject(1781699607015)"><i class="ti ti-trash" aria-hidden="true"></i></button>
+    </div></div>
+    </div>
+
+    <div style="margin-top: 1.5rem; display: block;" id="generate-wrap">
+      <button class="btn-generate" onclick="generateTimetable()">
+        <i class="ti ti-sparkles" aria-hidden="true"></i> Generate AI Study Timetable
+      </button>
+    </div>
+  </div>
+
+  <!-- TIMETABLE -->
+  <div class="panel" id="panel-timetable">
+    <div id="tt-empty" class="empty-state" style="display: none;">
+      <i class="ti ti-calendar-off" aria-hidden="true"></i>
+      <p>Generate a timetable first from the <strong>Add Subjects</strong> tab.</p>
+    </div>
+    <div id="tt-content" style="display: block;"><div class="stats-grid">
+    <div class="stat-card"><div class="stat-value">1</div><div class="stat-label">Subjects</div></div>
+    <div class="stat-card"><div class="stat-value">6h</div><div class="stat-label">Daily study</div></div>
+    <div class="stat-card"><div class="stat-value">2d</div><div class="stat-label">Nearest exam</div></div>
+  </div>
+  <div class="card">
+    <div class="section-title"><i class="ti ti-clock" aria-hidden="true"></i> Today's Study Schedule</div>
+    <div class="timetable-grid"><div class="time-slot">
+        <div class="time-label">4:00 PM</div>
+        <div class="time-block high">
+          <div class="block-subject">billglug</div>
+          <div class="block-detail">360 min · Medium · Exam in 2 days</div>
+        </div>
+      </div></div></div>
+  <div class="card card-sm" style="background:linear-gradient(135deg,#ede9fe,#ddd6fe);border-color:#c4b5fd">
+    <div style="display:flex;align-items:center;gap:10px">
+      <i class="ti ti-bulb" style="color:#7c3aed;font-size:22px" aria-hidden="true"></i>
+      <div>
+        <div style="font-weight:600;font-size:14px;color:#4c1d95">AI Tip</div>
+        <div style="font-size:13px;color:#5b21b6">Subjects closest to their exam date are allocated more study time. Study consistently and take breaks every 60 minutes!</div>
+      </div>
+    </div>
+  </div></div>
+  </div>
+
+  <!-- ANALYTICS -->
+  <div class="panel" id="panel-analytics">
+    <div id="an-empty" class="empty-state" style="display: none;">
+      <i class="ti ti-chart-bar" aria-hidden="true"></i>
+      <p>Generate a timetable first to see analytics.</p>
+    </div>
+    <div id="an-content" style="display: block;"><div class="section-title"><i class="ti ti-chart-bar" aria-hidden="true"></i> Priority Analysis</div>
+  <div class="chart-wrap">
+    <div class="chart-bars"><div class="bar-row">
+      <div class="bar-name">billglug</div>
+      <div class="bar-track"><div class="bar-fill" style="width:100%;background:#ef4444">High</div></div>
+      <div class="bar-score">1.000</div>
+    </div></div></div>
+
+  <div class="card">
+    <div class="section-title"><i class="ti ti-clock-hour-4" aria-hidden="true"></i> Time Allocation</div>
+    <div style="display:flex;flex-direction:column;gap:10px"><div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--surface2);border-radius:8px;border:1px solid var(--border)">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="tag tag-high">High</span>
+        <span style="font-weight:500;font-size:14px">billglug</span>
+      </div>
+      <div style="font-family:&#39;Syne&#39;,sans-serif;font-weight:700;color:var(--accent);font-size:15px">6h  </div>
+    </div></div></div></div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="panel" id="panel-about">
+    <div class="card" style="background:linear-gradient(135deg,#0f0f2a,#1e1b4b);border:none">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
+        <div style="width:50px;height:50px;background:#4f46e5;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px">🧠</div>
+        <div>
+          <h2 style="color:#fff;font-size:1.2rem">AI Smart Study Planner</h2>
+          <p style="color:#a5b4fc;font-size:13px">BTech CSE · Artificial Intelligence · 20 March 2026</p>
+        </div>
+      </div>
+      <p style="color:#c7d2fe;font-size:14px;line-height:1.7">Developed by <strong style="color:#fff">Aatif Shaikh &amp; Uzair Pathan</strong>. An AI-based system that analyzes exam dates, subject difficulty, and available study hours to automatically generate an optimized daily study timetable.</p>
+    </div>
+
+    <div class="about-grid">
+      <div class="info-card">
+        <h3><i class="ti ti-target" aria-hidden="true"></i> Objectives</h3>
+        <ul>
+          <li><i class="ti ti-check" aria-hidden="true"></i> Build an AI-based study planner</li>
+          <li><i class="ti ti-check" aria-hidden="true"></i> Prioritize subjects by exam dates</li>
+          <li><i class="ti ti-check" aria-hidden="true"></i> Allocate study hours efficiently</li>
+          <li><i class="ti ti-check" aria-hidden="true"></i> Generate daily timetable automatically</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h3><i class="ti ti-tool" aria-hidden="true"></i> Tools Used</h3>
+        <ul>
+          <li><i class="ti ti-check" aria-hidden="true"></i> Python – Programming language</li>
+          <li><i class="ti ti-check" aria-hidden="true"></i> Streamlit – Web interface</li>
+          <li><i class="ti ti-check" aria-hidden="true"></i> NumPy – Math calculations</li>
+          <li><i class="ti ti-check" aria-hidden="true"></i> Cost per user: ₹0 (all free)</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h3><i class="ti ti-database" aria-hidden="true"></i> Data Used</h3>
+        <ul>
+          <li><i class="ti ti-check" aria-hidden="true"></i> Subjects &amp; exam dates (survey)</li>
+          <li><i class="ti ti-check" aria-hidden="true"></i> Daily study hours available</li>
+          <li><i class="ti ti-check" aria-hidden="true"></i> Subject difficulty level</li>
+          <li><i class="ti ti-check" aria-hidden="true"></i> Numerical + categorical data</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h3><i class="ti ti-rocket" aria-hidden="true"></i> Future Improvements</h3>
+        <ul>
+          <li><i class="ti ti-check" aria-hidden="true"></i> Mobile app version</li>
+          <li><i class="ti ti-check" aria-hidden="true"></i> Reminder notifications</li>
+          <li><i class="ti ti-check" aria-hidden="true"></i> Calendar integration</li>
+          <li><i class="ti ti-check" aria-hidden="true"></i> Agentic auto-adjustment</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:1rem">
+      <div class="section-title"><i class="ti ti-math" aria-hidden="true"></i> AI Logic / Priority Formula</div>
+      <div class="formula-box">
+        <span class="formula-highlight">Priority Score</span> = (1 / days_left) × difficulty_weight<br><br>
+        Example:<br>
+        <span class="formula-result">Calculus</span> (2 days, Hard)  → Score = 0.50 × 3 = <span class="formula-highlight">1.50</span> — HIGH<br>
+        <span class="formula-result">DLD</span>      (5 days, Medium) → Score = 0.20 × 2 = <span class="formula-highlight">0.40</span> — MEDIUM<br>
+        <span class="formula-result">Chemistry</span>(10 days, Easy)  → Score = 0.10 × 1 = <span class="formula-highlight">0.10</span> — LOW
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:0">
+      <div class="section-title"><i class="ti ti-device-mobile" aria-hidden="true"></i> Accessibility</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+        <div style="text-align:center;padding:1rem;background:var(--surface2);border-radius:10px">
+          <div style="font-size:28px;margin-bottom:6px">📱</div>
+          <div style="font-size:13px;font-weight:600;color:var(--ink)">Mobile App</div>
+          <div style="font-size:12px;color:var(--ink3)">Convert to Android/iOS</div>
+        </div>
+        <div style="text-align:center;padding:1rem;background:var(--accent3);border-radius:10px">
+          <div style="font-size:28px;margin-bottom:6px">🌐</div>
+          <div style="font-size:13px;font-weight:600;color:var(--accent)">Web App</div>
+          <div style="font-size:12px;color:var(--ink3)">Streamlit interface</div>
+        </div>
+        <div style="text-align:center;padding:1rem;background:var(--surface2);border-radius:10px">
+          <div style="font-size:28px;margin-bottom:6px">🤖</div>
+          <div style="font-size:13px;font-weight:600;color:var(--ink)">Agentic AI</div>
+          <div style="font-size:12px;color:var(--ink3)">Auto-adjust schedules</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="credit">Aatif Shaikh &amp; Uzair Pathan · BTech CSE · Artificial Intelligence · 2026</div>
+</div>
+
+<script>
+let subjects = [];
+let dailyHours = 6;
+let startHour = 16;
+
+function switchTab(tab){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+tab).classList.add('active');
+  document.getElementById('tab-'+tab).classList.add('active');
+}
+
+function addSubject(){
+  const name = document.getElementById('inp-name').value.trim();
+  const dateVal = document.getElementById('inp-date').value;
+  const diff = parseInt(document.getElementById('inp-diff').value);
+  dailyHours = parseInt(document.getElementById('inp-hours').value)||6;
+  startHour = parseInt(document.getElementById('inp-start').value)||16;
+
+  if(!name){showToast('Enter a subject name','ti-alert-circle');return;}
+  if(!dateVal){showToast('Select an exam date','ti-alert-circle');return;}
+
+  const today = new Date(); today.setHours(0,0,0,0);
+  const exam = new Date(dateVal); exam.setHours(0,0,0,0);
+  const days = Math.max(1, Math.ceil((exam-today)/(1000*60*60*24)));
+
+  const score = parseFloat((diff / days).toFixed(4));
+  subjects.push({name,dateVal,diff,days,score,id:Date.now()});
+  subjects.sort((a,b)=>b.score-a.score);
+
+  document.getElementById('inp-name').value='';
+  document.getElementById('inp-date').value='';
+  renderSubjects();
+  showToast(name+' added!','ti-check');
+}
+
+function removeSubject(id){
+  subjects=subjects.filter(s=>s.id!==id);
+  renderSubjects();
+  if(subjects.length===0){
+    document.getElementById('tt-content').style.display='none';
+    document.getElementById('tt-empty').style.display='block';
+    document.getElementById('an-content').style.display='none';
+    document.getElementById('an-empty').style.display='block';
+  }
+}
+
+function renderSubjects(){
+  const list=document.getElementById('subjects-list');
+  const empty=document.getElementById('empty-subjects');
+  const wrap=document.getElementById('generate-wrap');
+  if(subjects.length===0){empty.style.display='block';list.innerHTML='';wrap.style.display='none';return;}
+  empty.style.display='none';
+  wrap.style.display='block';
+  list.innerHTML=subjects.map(s=>{
+    const lvl=getPriority(s.score);
+    const diffLabel=['','Easy','Medium','Hard'][s.diff];
+    return `<div class="subject-row">
+      <div>
+        <div class="subject-name">${s.name}</div>
+        <div class="subject-meta"><i class="ti ti-calendar" style="font-size:12px" aria-hidden="true"></i> ${s.days} day${s.days!==1?'s':''} left · ${diffLabel}</div>
+      </div>
+      <span class="tag tag-${lvl.toLowerCase()}">${lvl}</span>
+      <div class="priority-score">${s.score.toFixed(2)}</div>
+      <button class="btn btn-danger btn-sm" onclick="removeSubject(${s.id})"><i class="ti ti-trash" aria-hidden="true"></i></button>
+    </div>`;
+  }).join('');
+}
+
+function getPriority(score){
+  if(score>0.3)return'High';
+  if(score>0.1)return'Medium';
+  return'Low';
+}
+
+function getPriorityClass(score){
+  if(score>0.3)return'high';
+  if(score>0.1)return'medium';
+  return'low';
+}
+
+function generateTimetable(){
+  if(subjects.length===0){showToast('Add at least one subject first','ti-alert-circle');return;}
+  
+  const totalScore=subjects.reduce((a,s)=>a+s.score,0);
+  const slots=[];
+  let curHour=startHour;
+  let totalMins=dailyHours*60;
+
+  subjects.forEach((s,i)=>{
+    const frac=s.score/totalScore;
+    let mins=Math.round(frac*totalMins);
+    if(mins<30)mins=30;
+    const h=Math.floor(mins/60);
+    const m=mins%60;
+    const endHour=curHour+h+(m>0?1:0);
+    slots.push({...s,mins,h,m,startH:curHour,endH:endHour});
+    curHour=endHour;
+    if(i<subjects.length-1 && curHour<24){
+      slots.push({isBreak:true,startH:curHour,endH:curHour+1});
+      curHour+=1;
+    }
+  });
+
+  // render timetable
+  document.getElementById('tt-empty').style.display='none';
+  document.getElementById('tt-content').style.display='block';
+
+  let html=`<div class="stats-grid">
+    <div class="stat-card"><div class="stat-value">${subjects.length}</div><div class="stat-label">Subjects</div></div>
+    <div class="stat-card"><div class="stat-value">${dailyHours}h</div><div class="stat-label">Daily study</div></div>
+    <div class="stat-card"><div class="stat-value">${subjects[0]?subjects[0].days:0}d</div><div class="stat-label">Nearest exam</div></div>
+  </div>
+  <div class="card">
+    <div class="section-title"><i class="ti ti-clock" aria-hidden="true"></i> Today's Study Schedule</div>
+    <div class="timetable-grid">`;
+
+  slots.forEach(slot=>{
+    const fmt=h=>`${h>12?h-12:h===0?12:h}:00 ${h>=12?'PM':'AM'}`;
+    if(slot.isBreak){
+      html+=`<div class="time-slot">
+        <div class="time-label">${fmt(slot.startH)}</div>
+        <div class="time-block break"><div class="block-subject">☕ Break</div><div class="block-detail">Rest & refresh</div></div>
+      </div>`;
+    } else {
+      const lvl=getPriorityClass(slot.score);
+      const diffLabel=['','Easy','Medium','Hard'][slot.diff];
+      html+=`<div class="time-slot">
+        <div class="time-label">${fmt(slot.startH)}</div>
+        <div class="time-block ${lvl}">
+          <div class="block-subject">${slot.name}</div>
+          <div class="block-detail">${slot.mins} min · ${diffLabel} · Exam in ${slot.days} day${slot.days!==1?'s':''}</div>
+        </div>
+      </div>`;
+    }
+  });
+
+  html+=`</div></div>
+  <div class="card card-sm" style="background:linear-gradient(135deg,#ede9fe,#ddd6fe);border-color:#c4b5fd">
+    <div style="display:flex;align-items:center;gap:10px">
+      <i class="ti ti-bulb" style="color:#7c3aed;font-size:22px" aria-hidden="true"></i>
+      <div>
+        <div style="font-weight:600;font-size:14px;color:#4c1d95">AI Tip</div>
+        <div style="font-size:13px;color:#5b21b6">Subjects closest to their exam date are allocated more study time. Study consistently and take breaks every 60 minutes!</div>
+      </div>
+    </div>
+  </div>`;
+
+  document.getElementById('tt-content').innerHTML=html;
+
+  // render analytics
+  document.getElementById('an-empty').style.display='none';
+  document.getElementById('an-content').style.display='block';
+
+  const maxScore=subjects[0].score;
+  const colors=subjects.map(s=>getPriorityClass(s.score));
+  const colorMap={high:'#ef4444',medium:'#f59e0b',low:'#10b981'};
+
+  let ahtml=`<div class="section-title"><i class="ti ti-chart-bar" aria-hidden="true"></i> Priority Analysis</div>
+  <div class="chart-wrap">
+    <div class="chart-bars">`;
+
+  subjects.forEach((s,i)=>{
+    const pct=Math.round((s.score/maxScore)*100);
+    const lvl=getPriorityClass(s.score);
+    ahtml+=`<div class="bar-row">
+      <div class="bar-name">${s.name}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${colorMap[lvl]}">${pct>25?getPriority(s.score):''}</div></div>
+      <div class="bar-score">${s.score.toFixed(3)}</div>
+    </div>`;
+  });
+  ahtml+=`</div></div>
+
+  <div class="card">
+    <div class="section-title"><i class="ti ti-clock-hour-4" aria-hidden="true"></i> Time Allocation</div>
+    <div style="display:flex;flex-direction:column;gap:10px">`;
+
+  const totalScore2=subjects.reduce((a,s)=>a+s.score,0);
+  subjects.forEach(s=>{
+    const frac=s.score/totalScore2;
+    let mins=Math.max(30,Math.round(frac*dailyHours*60));
+    const h=Math.floor(mins/60);
+    const m=mins%60;
+    const lvl=getPriorityClass(s.score);
+    ahtml+=`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--surface2);border-radius:8px;border:1px solid var(--border)">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="tag tag-${lvl}">${getPriority(s.score)}</span>
+        <span style="font-weight:500;font-size:14px">${s.name}</span>
+      </div>
+      <div style="font-family:'Syne',sans-serif;font-weight:700;color:var(--accent);font-size:15px">${h>0?h+'h ':''} ${m>0?m+'min':''}</div>
+    </div>`;
+  });
+  ahtml+=`</div></div>`;
+
+  document.getElementById('an-content').innerHTML=ahtml;
+  showToast('Timetable generated!','ti-sparkles');
+  switchTab('timetable');
+}
+
+function showToast(msg,icon='ti-check'){
+  const t=document.createElement('div');
+  t.className='toast';
+  t.innerHTML=`<i class="ti ${icon}" aria-hidden="true"></i> ${msg}`;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),2800);
+}
+
+// Set default date to tomorrow
+const tomorrow=new Date();tomorrow.setDate(tomorrow.getDate()+2);
+document.getElementById('inp-date').value=tomorrow.toISOString().split('T')[0];
+
+// Load demo data
+function loadDemo(){
+  const demos=[
+    {name:'Calculus',days:2,diff:3},
+    {name:'Chemistry',days:10,diff:1},
+    {name:'DLD',days:5,diff:2},
+  ];
+  const base=new Date();base.setHours(0,0,0,0);
+  demos.forEach(d=>{
+    const exam=new Date(base);exam.setDate(base.getDate()+d.days);
+    const score=parseFloat((d.diff/d.days).toFixed(4));
+    subjects.push({name:d.name,dateVal:exam.toISOString().split('T')[0],diff:d.diff,days:d.days,score,id:Date.now()+Math.random()});
+  });
+  subjects.sort((a,b)=>b.score-a.score);
+  renderSubjects();
+  showToast('Demo data loaded!','ti-sparkles');
+}
+</script>
+
+<div style="position:fixed;bottom:24px;left:24px;z-index:10">
+  <button class="btn btn-outline btn-sm" onclick="loadDemo()" style="background:var(--surface);box-shadow:0 2px 12px rgba(0,0,0,0.1)"><i class="ti ti-database" aria-hidden="true"></i> Load Demo Data</button>
+</div>
+</body></html>
